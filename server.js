@@ -1,7 +1,6 @@
 const express = require("express");
 const fs = require("fs");
 const app = express();
-const port = 3000;
 
 const MESSAGE_FILE = "messages.json";
 
@@ -35,6 +34,8 @@ app.post("/messages", (req, res) => {
     res.status(400).json({ error: "Texte ou type manquant." });
   }
 });
+const cors = require("cors");
+app.use(cors());
 
 // Lancer le serveur
 app.listen(port, "0.0.0.0", () => {
