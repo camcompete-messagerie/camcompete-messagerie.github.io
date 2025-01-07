@@ -1,26 +1,50 @@
-const API_URL = "https://camcompete-messagerie-github-io.onrender.com/messages";
 const messagesContainer = document.getElementById("messages");
 const messageInput = document.getElementById("messageInput");
-const sendButton = document.getElementById("sendButton");
+const sendButtonBlue = document.getElementById("sendButtonBlue");
+let y = 1
+
+setInterval(() => {
+  loadMessages();
+}, 1000);
+
+setInterval(() => {
+  messagesContainer="[]";
+},1000);
+
+
+let tableauTimestamp = []; // Initialise le tableau des timestamps déjà affichés
 
 async function loadMessages() {
-  const response = await fetch(API_URL);
+  const response = await fetch("/messages");
   const data = await response.json();
-  data.forEach(({ text, type }) => addMessage(text, type));
+
+  data.forEach(({ timestamp, text, type }) => {
+    if (!tableauTimestamp.includes(timestamp)) { // Vérifie si le timestamp est absent
+      tableauTimestamp.push(timestamp); // Ajoute le timestamp au tableau pour éviter les doublons
+      addMessage(text, type, timestamp); // Ajoute le message
+    }
+  });
 }
 
-// Ajouter un message à l'interface
-function addMessage(text, type) {
-  const message = document.createElement("div");
-  message.className = `message ${type}`;
-  message.textContent = text;
+function addMessage(text, type, timestamp) {
+  const message = document.createElement("div"); // Création d'un nouvel élément message
+  const boutton = document.getElementById("sendButtonBlue");
+  const bouttonmessage = document.getElementById("messageColor");
+  tableauTimestamp.push(timestamp); // Ajoute le timestamp au tableau pour éviter les doublons
+  message.style.background = type;
+  boutton.style.background = type;
+  bouttonmessage.style.background = type;
+  message.className = "message-div";
+  message.innerHTML = text;
   messagesContainer.appendChild(message);
   messagesContainer.scrollTop = messagesContainer.scrollHeight; // Défile vers le bas
 }
 
+
+
 // Envoyer un message au serveur
 async function sendMessage(text, type) {
-  const response = await fetch(API_URL, {
+  const response = await fetch("/messages", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text, type }),
@@ -29,19 +53,22 @@ async function sendMessage(text, type) {
 }
 
 // Gestion de l'envoi de message
-sendButton.addEventListener("click", async () => {
-  const text = messageInput.value.trim();
-  if (text) {
-    addMessage(text, "sent");
-    messageInput.value = "";
 
-    const response = await sendMessage(text, "sent");
+
+sendButtonBlue.addEventListener("click", async () => {
+  let y = 0;
+  const text = messageInput.value.trim();
+  type = document.getElementById("messageColor").value;
+  if (text) {
+  //  addMessage(text, type);
+    messageInput.value = "";
+    const response = await sendMessage(text, type);
   }
+  loadMessages();
 });
 
 messageInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") sendButton.click();
+  if (e.key === "Enter") sendButtonBlue.click();
 });
-
-// Charger les messages au démarrage
 loadMessages();
+
