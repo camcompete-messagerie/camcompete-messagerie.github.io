@@ -15,12 +15,12 @@ app.use(express.json());
 app.use(express.static("public")); // Servir les fichiers statiques (HTML, CSS, JS)
 
 // Endpoint pour obtenir les messages
-app.get("/messages", (req, res) => {
+app.get("messages", (req, res) => {
   res.json(messages);
 });
 
 // Endpoint pour envoyer un message
-app.post("/messages", (req, res) => {
+app.post("messages", (req, res) => {
   const { text, type } = req.body;
   if (text && type) {
     const message = { text, type, timestamp: new Date().toISOString() };
