@@ -15,7 +15,7 @@ setInterval(() => {
 let tableauTimestamp = []; // Initialise le tableau des timestamps déjà affichés
 
 async function loadMessages() {
-  const response = await fetch("/messages");
+  const response = await fetch("messages");
   const data = await response.json();
 
   data.forEach(({ timestamp, text, type }) => {
@@ -44,7 +44,7 @@ function addMessage(text, type, timestamp) {
 
 // Envoyer un message au serveur
 async function sendMessage(text, type) {
-  const response = await fetch("/messages", {
+  const response = await fetch("messages", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text, type }),
