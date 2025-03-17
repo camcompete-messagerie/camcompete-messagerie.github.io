@@ -15,7 +15,7 @@ setInterval(() => {
 let tableauTimestamp = []; // Initialise le tableau des timestamps déjà affichés
 
 async function loadMessages() {
-  const response = await fetch("/messages");
+  const response = await fetch("localhost:3000/messages");
   const data = await response.json();
 
   data.forEach(({ timestamp, text, type, userName }) => {
@@ -58,7 +58,7 @@ function addMessage(text, type, timestamp, userName) {
 
 // Envoyer un message au serveur
 async function sendMessage(text, type, userName) {
-  const response = await fetch("/messages", {
+  const response = await fetch("localhost:3000/messages", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text, type, userName }),
@@ -129,7 +129,7 @@ function themepolice() {
 }
 
 async function register(id, password) {
-  const response = await fetch("/passwords", {
+  const response = await fetch("localhost:3000/passwords", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({id: password}),
@@ -138,7 +138,7 @@ async function register(id, password) {
 }
 
 async function formulaire_login() {
-  const reponse = await fetch("/passwords");
+  const reponse = await fetch("localhost:3000/passwords");
   const data = await reponse.json();
   if (data[document.getElementById("login_username").value] === document.getElementById("login_password").value){
     var userName = document.getElementById("login_username").value;  
